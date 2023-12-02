@@ -1,71 +1,3 @@
-function submitform() {
-  const input_1 = document.getElementById("coststep1_3").value;
-  const input_4 = document.getElementById("coststep1_4").value;
-  const coststep1_3_1 = document.getElementById("coststep1_3_1").checked
-    ? "E-Commerce"
-    : "";
-  const coststep1_3_2 = document.getElementById("coststep1_3_2").checked
-    ? "Wholesale trade"
-    : "";
-  const coststep1_3_3 = document.getElementById("coststep1_3_3").checked
-    ? "Marketing"
-    : "";
-  const coststep1_3_4 = document.getElementById("coststep1_3_4").checked
-    ? "Retail"
-    : "";
-  const coststep1_3_5 = document.getElementById("coststep1_3_5").checked
-    ? "Logistics"
-    : "";
-  const coststep1_3_6 = document.getElementById("coststep1_3_6").checked
-    ? "General trade"
-    : "";
-  const coststep1_3_7 = document.getElementById("coststep1_3_7").checked
-    ? "Consultancy"
-    : "";
-  const input_9 = document.getElementById("coststep1_2").value;
-  const input_6 = document.getElementById("coststep2_1").value;
-  const input_7 = document.getElementById("coststep2_2").value;
-  const input_8 = document.getElementById("coststep2_3").value;
-  const input_10_1 = document.getElementById("input_10_1").checked
-    ? "true"
-    : "";
-  const formdata = {
-    input_1,
-    input_4,
-    ["input_3.1"]: coststep1_3_1,
-    ["input_3.2"]: coststep1_3_2,
-    ["input_3.3"]: coststep1_3_3,
-    ["input_3.4"]: coststep1_3_4,
-    ["input_3.5"]: coststep1_3_5,
-    ["input_3.6"]: coststep1_3_6,
-    ["input_3.7"]: coststep1_3_7,
-    ["input_10.1"]: input_10_1,
-    input_9,
-    input_6,
-    input_7,
-    input_8,
-  };
-  fetch("https://test.wp.levitation.co.in/wp-json/gf/v2/forms/12/submissions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formdata),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
 document.addEventListener("DOMContentLoaded", function () {
   let currentStep = 1;
   const totalSteps = 4;
@@ -244,6 +176,84 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function submitform() {
+    const input_1 = document.getElementById("coststep1_3").value;
+    const input_4 = document.getElementById("coststep1_4").value;
+    const coststep1_3_1 = document.getElementById("coststep1_3_1").checked
+      ? "E-Commerce"
+      : "";
+    const coststep1_3_2 = document.getElementById("coststep1_3_2").checked
+      ? "Wholesale trade"
+      : "";
+    const coststep1_3_3 = document.getElementById("coststep1_3_3").checked
+      ? "Marketing"
+      : "";
+    const coststep1_3_4 = document.getElementById("coststep1_3_4").checked
+      ? "Retail"
+      : "";
+    const coststep1_3_5 = document.getElementById("coststep1_3_5").checked
+      ? "Logistics"
+      : "";
+    const coststep1_3_6 = document.getElementById("coststep1_3_6").checked
+      ? "General trade"
+      : "";
+    const coststep1_3_7 = document.getElementById("coststep1_3_7").checked
+      ? "Consultancy"
+      : "";
+    const input_9 = document.getElementById("coststep1_2").value;
+    const input_6 = document.getElementById("coststep2_1").value;
+    const input_7 = document.getElementById("coststep2_2").value;
+    const input_8 = document.getElementById("coststep2_3").value;
+    const input_10_1 = document.getElementById("input_10_1").checked
+      ? "true"
+      : "";
+    const countrycode = document.getElementById(
+      "step-1-country-code"
+    ).textContent;
+    const formdata = {
+      input_1,
+      input_4,
+      ["input_3.1"]: coststep1_3_1,
+      ["input_3.2"]: coststep1_3_2,
+      ["input_3.3"]: coststep1_3_3,
+      ["input_3.4"]: coststep1_3_4,
+      ["input_3.5"]: coststep1_3_5,
+      ["input_3.6"]: coststep1_3_6,
+      ["input_3.7"]: coststep1_3_7,
+      ["input_10.1"]: input_10_1,
+      input_9,
+      input_6,
+      input_7:countrycode+input_7,
+      input_8,
+    };
+    fetch(
+      "https://test.wp.levitation.co.in/wp-json/gf/v2/forms/12/submissions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((res) => {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          showStep(currentStep);
+          updateStepNavigation();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   showStep(currentStep);
   updateStepNavigation();
 
@@ -333,12 +343,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("costformgetacall")
     .addEventListener("click", function () {
-      submitform();
+      submitform(currentStep);
     });
   document
     .getElementById("mobile-costformgetacall")
     .addEventListener("click", function () {
-      submitform();
+      submitform(currentStep);
     });
 });
 
